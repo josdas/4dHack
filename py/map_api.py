@@ -34,7 +34,7 @@ class GMap:
         return duration // 60
 
     @lru_cache(maxsize=128)
-    def get_places(self, place_name, location=None, radius=None, min_price=None, max_price=None):
+    def get_places(self, place_name, location=None, radius=10, min_price=None, max_price=None):
         request = GooglePlace(self.gmaps_places, place_name,
                               radius=radius,
                               min_price=min_price,
@@ -42,9 +42,8 @@ class GMap:
                               open_now=True,
                               location=location,
                               language='ru')
-        print(request)
         if request['status'] != 'OK':
-            return None
+            return []
         elements = request['results']
         places = []
         for element in elements:
@@ -59,13 +58,6 @@ class GMap:
             places.append(place.Place(name, position, info))
         return places
 
-    @lru_cache(maxsize=128)
-    def get_duration_way(self, positions):
-        duration = 0
-        for i in range(len(positions) - 1):
-            duration += self.get_duration(positions[i].position, positions[i + 1].position, transit_mode='walking')
-        return duration
-
     @lru_cache(maxsize=128)  # IT IS NOT WORKING
     def get_directions(self, start, finish):  # todo
         request = GoogleDirections(self.gmaps_directions, start, finish,
@@ -76,7 +68,7 @@ class GMap:
         distription = []
         points = []
         for element in elements:
-            points.append()
+            points.append(None)
             distription.append(element['html_instructions'])
         return (points, distription)
 
