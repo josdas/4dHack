@@ -5,7 +5,7 @@ from googlemaps.directions import directions as GoogleDirections
 import place
 from functools import lru_cache
 
-GOOGLE_API_KEY_PLACES = 'AIzaSyDKGWd0jRVivr0pE3qDbB2byuqUslp5O_k'
+GOOGLE_API_KEY_PLACES = 'AIzaSyB9M7xrpriW3xLs7Ml9lVmWpVctXQJJ50I'  # 'AIzaSyDKGWd0jRVivr0pE3qDbB2byuqUslp5O_k'
 GOOGLE_API_KEY_DISTANCE = 'AIzaSyC4jSZqis47UqaA4Uahfxh8QwnKSJi0vhc'
 GOOGLE_API_KEY_DIRECTIONS = 'AIzaSyDHsLvj8Oyo0pElWFEfq7XLlmu1JS-O4Rg'
 
@@ -33,8 +33,26 @@ class GMap:
         duration = elements['duration']['value']
         return duration // 60
 
-    @lru_cache(maxsize=128)
-    def get_places(self, place_name, location=None, radius=10, min_price=None, max_price=None):
+    #@lru_cache(maxsize=128)
+    def get_places(self, place_name, location, radius=10, min_price=None, max_price=None):
+        def get_price_level(money):
+            if money > 1500:
+                return 3
+            elif money > 600:
+                return 2
+            elif money > 200:
+                return 1
+            else:
+                return 0
+
+        if max_price is not None:
+            max_price = get_price_level(max_price)
+        if min_price is not None:
+            min_price = get_price_level(min_price)
+
+        min_price = None  # it is bug
+        max_price = None
+
         request = GooglePlace(self.gmaps_places, place_name,
                               radius=radius,
                               min_price=min_price,

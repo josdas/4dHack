@@ -93,7 +93,6 @@ def find_path(gmap, start, finish, duration, duration_on_foot, money, temp_place
         for place in temp_place:
             walk_places += gmap.get_places(
                 place,
-                radius=1000000,
                 location=point,
                 min_price=0,
                 max_price=money
@@ -101,7 +100,6 @@ def find_path(gmap, start, finish, duration, duration_on_foot, money, temp_place
         if cafe_type is not None:
             walk_places += gmap.get_places(
                 cafe_type,
-                radius=1000000,
                 location=point,
                 min_price=0,
                 max_price=money
