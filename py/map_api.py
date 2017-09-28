@@ -51,19 +51,17 @@ class GMap:
             name = element['name']
             position_lat_lng = element['geometry']['location']
             position = position_lat_lng['lat'], position_lat_lng['lng']
-            info = {
-                'types': element['types'],
-                'rating': element['rating'],
-                'address': element['formatted_address']
-                'type': place_name
-            }
+            info = {}
+            for label in ['types', 'rating', 'address']:
+                if label in element:
+                    info[label] = element[label]
+            info['type'] = place_name
             places.append(place.Place(name, position, info))
         return places
 
     @lru_cache(maxsize=128)
-    def get_duration_way(self, start, finish, positions):
-        duration = self.get_duration(start.position, positions[0].position) \
-                   + self.get_duration(positions[-1].position, finish.position)
+    def get_duration_way(self, positions):
+        duration = 0
         for i in range(len(positions) - 1):
             duration += self.get_duration(positions[i].position, positions[i + 1].position, transit_mode='walking')
         return duration
