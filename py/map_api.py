@@ -31,7 +31,7 @@ class GMap:
         if elements['status'] != 'OK':
             return None
         duration = elements['duration']['value']
-        return duration
+        return duration // 60
 
     @lru_cache(maxsize=128)
     def get_places(self, place_name, location=None, radius=None, min_price=None, max_price=None):
@@ -55,15 +55,17 @@ class GMap:
                 'types': element['types'],
                 'rating': element['rating'],
                 'address': element['formatted_address']
+                'type': place_name
             }
             places.append(place.Place(name, position, info))
         return places
 
     @lru_cache(maxsize=128)
     def get_duration_way(self, start, finish, positions):
-        duration = self.get_duration(start, positions[0]) + self.get_duration(positions[-1], finish)
+        duration = self.get_duration(start.position, positions[0].position) \
+                   + self.get_duration(positions[-1].position, finish.position)
         for i in range(len(positions) - 1):
-            duration += self.get_duration(positions[i], positions[i + 1], transit_mode='walking')
+            duration += self.get_duration(positions[i].position, positions[i + 1].position, transit_mode='walking')
         return duration
 
     @lru_cache(maxsize=128)  # IT IS NOT WORKING
