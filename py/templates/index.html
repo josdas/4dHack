@@ -3,15 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>AJAX вместе с Flask</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
-    <script async defer
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDbez0y94u2eJ6jPrbJncDELGkIxk0YV1w&callback=initMap">
-    </script>
-    <script src="{{url_for('static', filename='script.js')}}"></script>
-    <script src="{{url_for('static', filename='map.js')}}"></script>
-    <script>
-        var params = new URLSearchParams();
-    </script>
     <style>
         #map {
             height: 1000px;
@@ -20,14 +11,34 @@
     </style>
 </head>
 <body>
-    <form action="/" method="post" name="form">
+   <!-- <form action="/" method="post" name="form">
         <label for="name">Введите текст:</label>
         <input id="name" name="name" type="text">
         <input type="button" value="Построить Внешне" onclick="get_path();">
-    </form>
-
-    <h3>My Google Maps Demo</h3>
+    </form>-->
     <div id="map"></div>
-    <div id="info"></div>
+
+    <div id="info1"></div>
+    <div id="info2"></div>
+    <div id="info3"></div>
+    <div id="info4"></div>
+    <div id="info5"></div>
+    <div id="info6"></div>
+    <div id="info7"></div>
+    <div id="info8"></div>
+    <div id="info9"></div>
+    <div id="info10"></div>
+    <div id="info11"></div>
+    <div id="info12"></div>
+    <div id="info13"></div>
+    <div id="info14"></div>
+    <div id="info15"></div>
+    <div id="info16"></div>
+    <div id="info17"></div>
+    <div id="info18"></div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <script src="{{url_for('static', filename='map.js')}}"></script>
+    <script src="{{url_for('static', filename='script.js')}}"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDbez0y94u2eJ6jPrbJncDELGkIxk0YV1w&callback=initMap"></script>
 </body>
 </html>

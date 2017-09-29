@@ -29,16 +29,11 @@ function get_path_url(){
 }
 
 
-function get_path(){
+function get_path(query){
     $.ajax({
         type: "GET",
         url: "/get_path",
-        data: {
-            "start": {
-                "lat":50.000,
-                "lng":30.000
-            }
-        },
+        data: query,
         type: 'GET',
         success: display_path,
         error: function(error) {

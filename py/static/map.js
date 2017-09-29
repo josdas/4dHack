@@ -13,13 +13,14 @@ function initMap() {
         zoom: 4,
         center: uluru
     });
-    $("div#info").bind("DOMSubtreeModified",function(){
+    $("div#info*").bind("DOMSubtreeModified",function(){
         $("div.adp-warnbox").remove();
     });
     /*var marker = new google.maps.Marker({
         position: uluru,
         map: map
     });*/
+    get_path(location.search.slice(1))
 }
 
 
@@ -35,11 +36,11 @@ function load_path_url(response){
 
 
 function add_path_to_map(from, to, type, num){
-    /*alert(from.lat)
-    alert(from.lng)*/
-    directionsDisplays[num] = new google.maps.DirectionsRenderer()
-    directionsDisplays[num].setMap(map)
-    //document.getElementBy("adp-warnbox").style.display='none'
+    directionsDisplays[num] = new google.maps.DirectionsRenderer(
+    {
+      map: map,
+      suppressMarkers : true
+    })
     var request = {
         origin: new google.maps.LatLng(from.lat, from.lng),
         destination: new google.maps.LatLng(to.lat, to.lng),
@@ -47,9 +48,10 @@ function add_path_to_map(from, to, type, num){
     };
     directionsService.route(request, function(result, status) {
         if (status == 'OK') {
-            //directionsDisplays[num].setPanel(document.getElementById('info'))
-            //directionsDisplays[num].setDirections(result);
-            var line = result.routes[0].overview_path
+            directionsDisplays[num].setPanel(document.getElementById('info'+(num+1)))
+            directionsDisplays[num].setDirections(result);
+
+            /*var line = result.routes[0].overview_path
 
             var Path = new google.maps.Polyline({
                 path: line,
@@ -58,7 +60,7 @@ function add_path_to_map(from, to, type, num){
                 strokeOpacity: 1.0,
                 strokeWeight: 2
             });
-            Path.setMap(map)
+            Path.setMap(map)*/
 
         }
         else{
@@ -90,6 +92,7 @@ function display_path(response){
         })
 
     map.setCenter(marker.getPosition());
+    map.setZoom(12)
 }
 //data=!3m1!4b1!4m2!4m1!3e0
 //data=!3m1!4b1!4m2!4m1!3e2
