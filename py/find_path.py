@@ -111,13 +111,13 @@ def get_score_function(start, finish, duration, duration_on_foot, money, temp_pl
 def score_decorate(find):
     def temp_function(*args, **keys):
         fun = get_score_function(*args, **keys)
-        return find(calc_score=fun, *args, **keys)
+        return find(*args, **keys, calc_score=fun)
 
     return temp_function
 
 
 @score_decorate
-def find_path(calc_score, start, finish, duration, duration_on_foot, money, temp_place, cafe_type, time_cafe):
+def find_path(start, finish, duration, duration_on_foot, money, temp_place, cafe_type, time_cafe, calc_score):
     """
     :param start: --- position tuple(float, float)
     :param finish: --- position tuple(float, float)
