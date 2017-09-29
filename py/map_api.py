@@ -7,7 +7,7 @@ import place
 from functools import lru_cache
 
 GOOGLE_API_KEY_PLACES = 'AIzaSyB9M7xrpriW3xLs7Ml9lVmWpVctXQJJ50I'  # 'AIzaSyDKGWd0jRVivr0pE3qDbB2byuqUslp5O_k'
-GOOGLE_API_KEY_DISTANCE = 'AIzaSyAYIsrbLSd5vLMuOqJpelFgi6N04qk9hEo' # 'AIzaSyC4jSZqis47UqaA4Uahfxh8QwnKSJi0vhc'  # 'AIzaSyAkThybQY1wmBGHSKH96nrUkaBKQcMyrxc'  #
+GOOGLE_API_KEY_DISTANCE = 'AIzaSyAPj-Ve1KeGZJLDxOfDXhsS9dzpYECWCU4' #'AIzaSyAkThybQY1wmBGHSKH96nrUkaBKQcMyrxc'# 'AIzaSyC4jSZqis47UqaA4Uahfxh8QwnKSJi0vhc' #'AIzaSyAYIsrbLSd5vLMuOqJpelFgi6N04qk9hEo' #   #   #
 GOOGLE_API_KEY_DIRECTIONS = 'AIzaSyDHsLvj8Oyo0pElWFEfq7XLlmu1JS-O4Rg'
 
 
@@ -84,19 +84,12 @@ class GMap:
             places.append(place.Place(name, position, info))
         return places
 
-    @lru_cache(maxsize=128)  # IT IS NOT WORKING
-    def get_directions(self, start, finish):  # todo
-        request = GoogleDirections(self.gmaps_directions, start, finish,
-                                   mode='transit',
-                                   region='ru',
-                                   language='ru')
-        elements = request[0]['legs'][0]['steps']
-        distription = []
-        points = []
-        for element in elements:
-            points.append(None)
-            distription.append(element['html_instructions'])
-        return (points, distription)
+    @lru_cache(maxsize=128)
+    def get_position_from_name(self, place_name, location):
+        places = self.get_places(place_name=place_name + ", Санкт-Петербург",
+                                 location=location,
+                                 radius=10000)
+        return places[0].position
 
 
 if __name__ == '__main__':
