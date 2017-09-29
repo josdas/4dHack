@@ -130,7 +130,7 @@ def find_path(calc_score, start, finish, duration, duration_on_foot, money, temp
     :return: [place, ...]
     """
     gmap = map_api.GMap()
-    if False:
+    if True:
         walk_places = []
         for place_type in temp_place:
             walk_places.append([])
@@ -169,7 +169,7 @@ def find_path(calc_score, start, finish, duration, duration_on_foot, money, temp
     best_path = []
     best_score = -10 ** 10
 
-    for iteration in range(20):
+    for iteration in range(30):
         random.seed(iteration + 228)
 
         size = random.randint(1, len(walk_places) * 2)
