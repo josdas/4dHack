@@ -10,10 +10,10 @@ def find_path(gmap, start, finish, duration, duration_on_foot, money, temp_place
     :param duration: --- float
     :param duration_on_foot: --- float
     :param money: --- float
-    :param temp_place: --- [position]
+    :param temp_place: --- [name, ...]
     :param cafe_type: --- str or None
     :param time_cafe: --- float or None
-    :return: [positions, ...]
+    :return: [place, ...]
     """
 
     def calc_score(places):
@@ -131,8 +131,6 @@ def find_path(gmap, start, finish, duration, duration_on_foot, money, temp_place
                 max_price=money
             )
 
-        # walk_places = list(set(walk_places))
-
         if False:
             import pickle
             for i in range(len(walk_places)):
@@ -205,13 +203,13 @@ if __name__ == '__main__':
     temp = find_path(
         gmap,
         start=start,
-        finish=finish,
-        duration=30,
-        duration_on_foot=30,
+        finish=start,
+        duration=60,
+        duration_on_foot=60,
         money=300,
-        temp_place=['парк', 'магазин одежды'],
-        cafe_type='кафе',
-        time_cafe=30
+        temp_place=['парк', 'кладбище'],
+        cafe_type='бар',
+        time_cafe=60
     )
     for x in temp[1]:
         print(x.position)
