@@ -6,7 +6,7 @@ import place
 from functools import lru_cache
 
 GOOGLE_API_KEY_PLACES = 'AIzaSyB9M7xrpriW3xLs7Ml9lVmWpVctXQJJ50I'  # 'AIzaSyDKGWd0jRVivr0pE3qDbB2byuqUslp5O_k'
-GOOGLE_API_KEY_DISTANCE = 'AIzaSyC4jSZqis47UqaA4Uahfxh8QwnKSJi0vhc'
+GOOGLE_API_KEY_DISTANCE = 'AIzaSyAYIsrbLSd5vLMuOqJpelFgi6N04qk9hEo' # 'AIzaSyC4jSZqis47UqaA4Uahfxh8QwnKSJi0vhc'  # 'AIzaSyAkThybQY1wmBGHSKH96nrUkaBKQcMyrxc'  #
 GOOGLE_API_KEY_DIRECTIONS = 'AIzaSyDHsLvj8Oyo0pElWFEfq7XLlmu1JS-O4Rg'
 
 
@@ -18,7 +18,7 @@ class GMap:
         self.gmaps_distance = googlemaps.Client(key=GOOGLE_API_KEY_DISTANCE)
         self.gmaps_directions = googlemaps.Client(key=GOOGLE_API_KEY_DIRECTIONS)
 
-    @lru_cache(maxsize=128)
+    @lru_cache(maxsize=None)
     def get_duration(self, first_point, second_point, transit_mode='transit'):
         """
         Result is a distance between two points with selected transit_mode
@@ -33,8 +33,8 @@ class GMap:
         duration = elements['duration']['value']
         return duration // 60
 
-    #@lru_cache(maxsize=128)
-    def get_places(self, place_name, location, radius=10, min_price=None, max_price=None):
+    @lru_cache(maxsize=128)
+    def get_places(self, place_name, location, radius=2000, min_price=None, max_price=None):
         def get_price_level(money):
             if money > 1500:
                 return 3
@@ -42,22 +42,18 @@ class GMap:
                 return 2
             elif money > 200:
                 return 1
-            else:
-                return 0
+            return 0
 
         if max_price is not None:
             max_price = get_price_level(max_price)
         if min_price is not None:
             min_price = get_price_level(min_price)
 
-        min_price = None  # it is bug
-        max_price = None
-
         request = GooglePlace(self.gmaps_places, place_name,
                               radius=radius,
-                              min_price=min_price,
-                              max_price=max_price,
-                              open_now=True,
+                              # min_price=min_price,  # it is bug
+                              # max_price=max_price,
+                              # open_now=True,
                               location=location,
                               language='ru')
         if request['status'] != 'OK':
