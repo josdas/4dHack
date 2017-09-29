@@ -1,6 +1,7 @@
 import googlemaps
 from googlemaps.distance_matrix import distance_matrix
 from googlemaps.places import places as GooglePlace
+from googlemaps.places import places_photo as GooglePlacePhoto
 from googlemaps.directions import directions as GoogleDirections
 import place
 from functools import lru_cache
@@ -14,9 +15,15 @@ class GMap:
     """Map is a cover on goolge maps"""
 
     def __init__(self):
-        self.gmaps_places = googlemaps.Client(key=GOOGLE_API_KEY_PLACES)
-        self.gmaps_distance = googlemaps.Client(key=GOOGLE_API_KEY_DISTANCE)
-        self.gmaps_directions = googlemaps.Client(key=GOOGLE_API_KEY_DIRECTIONS)
+        if not hasattr(GMap, 'instance'):
+            GMap.instance = True
+            GMap.gmaps_places = googlemaps.Client(key=GOOGLE_API_KEY_PLACES)
+            GMap.gmaps_distance = googlemaps.Client(key=GOOGLE_API_KEY_DISTANCE)
+            GMap.gmaps_directions = googlemaps.Client(key=GOOGLE_API_KEY_DIRECTIONS)
+        else:
+            self.gmaps_places = GMap.gmaps_places
+            self.gmaps_distance = GMap.gmaps_distance
+            self.gmaps_directions = GMap.gmaps_directions
 
     @lru_cache(maxsize=None)
     def get_duration(self, first_point, second_point, transit_mode='transit'):
@@ -25,7 +32,7 @@ class GMap:
         transit_mode in {transit, walking}
         """
         request = distance_matrix(self.gmaps_distance, first_point, second_point,
-                                  transit_mode=transit_mode,
+                                  mode=transit_mode,
                                   language='ru')
         elements = request['rows'][0]['elements'][0]
         if elements['status'] != 'OK':
@@ -69,6 +76,11 @@ class GMap:
                 if label in element:
                     info[label] = element[label]
             info['type'] = place_name
+            """if element.get('photos', []):
+               reference = element['photos'][0]['photo_reference']
+               photo = GooglePlacePhoto(self.gmaps_places, reference, max_height=200, max_width=200)
+               print(photo)
+               pass"""
             places.append(place.Place(name, position, info))
         return places
 
