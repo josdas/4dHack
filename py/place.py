@@ -1,8 +1,16 @@
+
 class Place:
-    def __init__(self, name, position, other_data):
+    def __init__(self, name, position, info):
         self.name = name
-        self.position = position
-        self.info = other_data
+        self.position = tuple(position)
+        self.info = info
+
+    def to_dick(self):
+        return {
+            'name': self.name,
+            'position': list(self.position),
+            'info': self.info
+        }
 
     def __str__(self):
         return self.name
@@ -11,4 +19,4 @@ class Place:
         return self.position == other.position
 
     def __hash__(self):
-        return 1
+        return self.name.__hash__()
