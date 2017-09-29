@@ -50,7 +50,7 @@ def get_score_function(start, finish, duration, duration_on_foot, money, temp_pl
                 # рейтинг влияет чуть хуже
                 score += place.info.get('rating', 0) * 100
         if cafe_type is not None and cafe_type not in visited:
-            score -= 10**4
+            score -= 10 ** 4
 
         # считаем время между точками пешком
         for i in range(len(places) - 1):
@@ -64,7 +64,7 @@ def get_score_function(start, finish, duration, duration_on_foot, money, temp_pl
                     spent_time_on_foot += time_to_next
                 spent_time += time_to_next
             else:
-                score -= 10**10
+                score -= 10 ** 10
 
         # Самопересечения пути и острые углы - это плохо
         for i in range(1, len(places) - 1):
@@ -77,7 +77,7 @@ def get_score_function(start, finish, duration, duration_on_foot, money, temp_pl
 
         # если мы потратили больше, чем планировали, то очень плохо
         if money < spent_money:
-            score -= 10**5
+            score -= 10 ** 5
 
         # считаем очки за посещенные цели
         score += len(set(temp_place) & set(visited)) * 40
@@ -85,7 +85,6 @@ def get_score_function(start, finish, duration, duration_on_foot, money, temp_pl
             if visited_place in temp_place:
                 index = temp_place.index(visited_place)
                 score += 1 / (5 + index) * 1000
-
 
         # считаем штраф за время на ногах
         dif_time_on_foot = rel_error(duration_on_foot, spent_time_on_foot)
@@ -101,8 +100,8 @@ def get_score_function(start, finish, duration, duration_on_foot, money, temp_pl
         else:
             score -= abs(dif_time) ** 3 * 6000
         if abs(duration - spent_time) > 60:
-            score -= 10**4
-        print(spent_time,  spent_time_on_foot)
+            score -= 10 ** 4
+        print(spent_time, spent_time_on_foot)
         return score
 
     return calc_score
@@ -116,11 +115,13 @@ def score_decorate(find):
     return temp_function
 
 
+SPB_POSITION = (59.974597, 30.336504)
+
 @score_decorate
 def find_path(start, finish, duration, duration_on_foot, money, temp_place, cafe_type, time_cafe, calc_score):
     """
-    :param start: --- position tuple(float, float)
-    :param finish: --- position tuple(float, float)
+    :param start: --- position tuple(float, float) or str
+    :param finish: --- position tuple(float, float) or str
     :param duration: --- float
     :param duration_on_foot: --- float
     :param money: --- float
@@ -130,6 +131,11 @@ def find_path(start, finish, duration, duration_on_foot, money, temp_place, cafe
     :return: [place, ...]
     """
     gmap = map_api.GMap()
+    if isinstance(start, str):
+        start = gmap.get_position_from_name(start, SPB_POSITION)
+    if isinstance(finish, str):
+        finish = gmap.get_position_from_name(finish, SPB_POSITION)
+    print(start)
     if True:
         walk_places = []
         for place_type in temp_place:
@@ -167,7 +173,7 @@ def find_path(start, finish, duration, duration_on_foot, money, temp_place, cafe
                 walk_places[i][j] = Place.Place(**walk_places[i][j])
 
     best_path = []
-    best_score = -10 ** 10
+    best_score = -10 ** 30
 
     for iteration in range(30):
         random.seed(iteration + 228)
@@ -218,7 +224,7 @@ def find_path(start, finish, duration, duration_on_foot, money, temp_place, cafe
 
 if __name__ == '__main__':
     random.seed(3124)
-    start = (59.974597, 30.336504)
+    start = 'Исаакиевский собор'  # (59.974597, 30.336504)
     finish = (59.964200, 30.357014)
     temp = find_path(
         start=start,
