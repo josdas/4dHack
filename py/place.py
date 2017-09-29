@@ -1,4 +1,3 @@
-
 class Place:
     def __init__(self, name, position, info):
         self.name = name
@@ -19,4 +18,4 @@ class Place:
         return self.position == other.position
 
     def __hash__(self):
-        return self.name.__hash__()
+        return self.position.__hash__()
