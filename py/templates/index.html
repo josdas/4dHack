@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AJAX вместе с Flask</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDbez0y94u2eJ6jPrbJncDELGkIxk0YV1w&callback=initMap">
+    </script>
+    <script src="{{url_for('static', filename='script.js')}}"></script>
+    <script src="{{url_for('static', filename='map.js')}}"></script>
+    <script>
+        var params = new URLSearchParams();
+    </script>
+    <style>
+        #map {
+            height: 1000px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <form action="/" method="post" name="form">
+        <label for="name">Введите текст:</label>
+        <input id="name" name="name" type="text">
+        <input type="button" value="Построить Внешне" onclick="get_path();">
+    </form>
+
+    <h3>My Google Maps Demo</h3>
+    <div id="map"></div>
+    <div id="info"></div>
+</body>
+</html>
