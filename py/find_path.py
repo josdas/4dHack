@@ -219,7 +219,7 @@ def find_path(start, finish, duration, duration_on_foot, money, temp_place, cafe
                 best_path = mid_path
         else:
             print('fail', iteration)
-    return best_score, best_path
+    return best_path
 
 
 if __name__ == '__main__':
